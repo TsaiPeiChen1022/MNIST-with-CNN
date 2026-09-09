@@ -203,7 +203,7 @@ class CNN:
             b_result = self.back_propagation(X_train[i],Y_train[i],f_result)
             self.optimize(b_result,l_rate(learning_rate,i,num_iterations,False))
             
-            if count % 100 == 0:
+            if count % 1000 == 0:
                 if count % 30000 == 0:
                     loss = 'NA' # self.loss(x_test,y_test)
                     test = self.testing(x_test,y_test)
@@ -229,34 +229,20 @@ class CNN:
             if n % 1000 == 0:
                 print('testing data',n)
         print('Accuarcy Test: ',total_correct/len(X_test))
-        return total_correct/np.float(len(X_test))
+        return total_correct/float(len(X_test))
 
 
 ####################################################################################
 
 
 # data fitting, training and accuracy evaluation
-model = CNN(batch_size = 1, num_iterations=120000, l_rate=0.01, stride=1, 
+model = CNN(batch_size = 1, num_iterations=3000, l_rate=0.01, stride=1, 
 padding=0, dim_kernal=3, num_kernals=5, dim_inputs=28, input_chanl=1, len_outputs=10)
 model.printing()
-cost_dict,tests_dict = model.train(x_train,y_train)
-accu = model.testing(x_test,y_test)
-model.printing()
+start_time = time.perf_counter()
+cost_dict, tests_dict = model.train(x_train, y_train)
+#accu = model.testing(x_test, y_test)
+total_time = time.perf_counter() - start_time
+print(f"Total Execution Time: {total_time:.2f} seconds")
 
 
-
-# plotting the loss function and test accuracy corresponding to the number of iterations
-import matplotlib.pyplot as plt
-# plt.plot(cost_dict.keys(),cost_dict.values())
-# plt.ylabel('Loss function')
-# plt.xlabel('Number of iterations')
-# plt.xticks(rotation=60)
-# plt.title('Loss function w.r.t. number of iterations')
-# plt.show()
-
-plt.plot(tests_dict.keys(),tests_dict.values())
-plt.ylabel('Test Accuracy')
-plt.xlabel('Number of iterations')
-plt.xticks(rotation=60)
-plt.title('Test accuracy w.r.t. number of iterations')
-plt.show()
